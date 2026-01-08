@@ -1,0 +1,48 @@
+name: Build and Release
+
+on:
+    push:
+        branches:
+            - main
+    release:
+        types: [published]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: "1.25.5"
+
+            - name: Build Linux
+              run: make build-linux
+
+            - name: Build Windows
+              run: make build-windows
+
+            - name: Upload Linux Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: timediff-linux
+                  path: timediff
+
+            - name: Upload Windows Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: timediff-windows
+                  path: timediff.exe
+
+            - name: Upload to Release
+              if: github.event_name == 'release'
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      timediff
+                      timediff.exe
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
