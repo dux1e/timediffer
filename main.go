@@ -22,6 +22,7 @@ func main() {
 		kong.UsageOnError(),
 	)
 
+	// layout acorging to time package constants https://pkg.go.dev/time#pkg-constants
 	layout := "1504"
 
 	fmt.Printf("from is: %s\n", CLI.From)
