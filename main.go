@@ -13,6 +13,7 @@ var CLI struct {
 	From  string `arg:"" help:"Startime (HHMM)"`
 	To    string `arg:"" help:"Endtime (HHMM)"`
 	Pause int    `arg:"" help:"Pause in minutes" default:"0"`
+	Quiet bool   `flag:"quiet" short:"q" help:"Quiet or not"`
 }
 
 func main() {
@@ -25,9 +26,12 @@ func main() {
 	// layout acorging to time package constants https://pkg.go.dev/time#pkg-constants
 	layout := "1504"
 
-	fmt.Printf("from is: %s\n", CLI.From)
+	if !CLI.Quiet {
+		fmt.Printf("from is: %s\n", CLI.From)
 
-	fmt.Printf("to is: %s\n", CLI.To)
+		fmt.Printf("to is: %s\n", CLI.To)
+	}
+
 	fromTime, err := time.Parse(layout, CLI.From)
 	if err != nil {
 		ctx.FatalIfErrorf((fmt.Errorf("input for 'from' time wrong: use (HHMM)")))
@@ -51,6 +55,8 @@ func main() {
 		fmt.Printf("Couldn't copy to clipboard: %v\n", err)
 	}
 
-	fmt.Println("The time differense is")
-	fmt.Printf("%s\n", outputDanish)
+	if !CLI.Quiet {
+		fmt.Println("The time differense is")
+		fmt.Printf("%s\n", outputDanish)
+	}
 }
