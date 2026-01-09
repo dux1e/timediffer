@@ -16,4 +16,5 @@ Arguments:
 
 Flags:
   -h, --help    Show context-sensitive help.
+  -q, --quiet    Quiet or not
 ```
